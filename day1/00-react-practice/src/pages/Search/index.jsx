@@ -1,16 +1,16 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useState, useEffect } from 'react';
-import API from '../../utils/API';
-import Container from '../../components/Container';
-import SearchForm from '../../components/SearchForm';
-import SearchResults from '../../components/SearchResults';
-import Alert from '../../components/Alert';
+import { useState, useEffect } from "react";
+import API from "../../utils/API";
+import Container from "../../components/Container";
+import SearchForm from "../../components/SearchForm";
+import SearchResults from "../../components/SearchResults";
+import Alert from "../../components/Alert";
 
 function Search() {
-  const [search, setSearch] = useState('Wikipedia');
-  const [title, setTitle] = useState('');
-  const [url, setUrl] = useState('');
-  const [error, setError] = useState('');
+  const [search, setSearch] = useState("Wikipedia");
+  const [title, setTitle] = useState("");
+  const [url, setUrl] = useState("");
+  const [error, setError] = useState("");
 
   // TODO: Fix the useEffect hook running after every state change.
   useEffect(() => {
@@ -21,12 +21,14 @@ function Search() {
     API.searchTerms(search)
       .then((res) => {
         if (res.data.length === 0) {
-          throw new Error('No results found.');
+          throw new Error("No results found.");
         }
-        if (res.data.status === 'error') {
+        if (res.data.status === "error") {
           throw new Error(res.data.message);
         }
         // TODO: Use the response data to set the title and url.
+        setTitle(res.data[1][0]);
+        setUrl(res.data[3][0]);
       })
       .catch((err) => setError(err));
   });
@@ -34,11 +36,12 @@ function Search() {
   // TODO: Fix the handleInputChange function to display the Wikipedia URL
   const handleInputChange = (event) => {
     console.log(event.target.value);
+    setSearch(event.target.value);
   };
 
   return (
     <div>
-      <Container style={{ minHeight: '100vh' }}>
+      <Container style={{ minHeight: "100vh" }}>
         <h1 className="text-center pt-5">Search For Anything on Wikipedia</h1>
         <Alert
           type="danger"
